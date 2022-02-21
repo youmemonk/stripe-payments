@@ -1,9 +1,6 @@
-import React from "react";
-import { CardElement } from "@stripe/react-stripe-js";
-import { useElements } from "@stripe/react-stripe-js";
-import { useStripe } from "@stripe/react-stripe-js";
-import { useState } from "react";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
+import React, { useState } from "react";
 
 const CARD_OPTIONS = {
   iconStyle: "solid",
@@ -32,7 +29,7 @@ export default function PaymentForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const [error, paymentMethod] = await stripe.createPaymentMethod({
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
       type: "card",
       card: elements.getElement(CardElement),
     });
@@ -44,8 +41,9 @@ export default function PaymentForm() {
           amount: 1000,
           id,
         });
+
         if (response.data.success) {
-          console.log("Successful Payment");
+          console.log("Successful payment");
           setSuccess(true);
         }
       } catch (error) {
@@ -58,11 +56,10 @@ export default function PaymentForm() {
 
   return (
     <>
-      {/* PaymentForm */}
       {!success ? (
         <form onSubmit={handleSubmit}>
-          <fieldset className="formgroup">
-            <div className="formrow">
+          <fieldset className="FormGroup">
+            <div className="FormRow">
               <CardElement options={CARD_OPTIONS} />
             </div>
           </fieldset>
@@ -70,7 +67,10 @@ export default function PaymentForm() {
         </form>
       ) : (
         <div>
-          <h2>You bought an item.</h2>
+          <h2>
+            You just bought a sweet spatula congrats this is the best decision
+            of you're life
+          </h2>
         </div>
       )}
     </>
